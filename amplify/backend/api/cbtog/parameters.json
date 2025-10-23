@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "cbtog",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authcbtog11d20698",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

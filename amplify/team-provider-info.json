@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cbtog-dev-4854e-authRole",
+      "UnauthRoleArn": "arn:aws:iam::629891807021:role/amplify-cbtog-dev-4854e-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::629891807021:role/amplify-cbtog-dev-4854e-authRole",
+      "Region": "eu-north-1",
+      "DeploymentBucketName": "amplify-cbtog-dev-4854e-deployment",
+      "UnauthRoleName": "amplify-cbtog-dev-4854e-unauthRole",
+      "StackName": "amplify-cbtog-dev-4854e",
+      "StackId": "arn:aws:cloudformation:eu-north-1:629891807021:stack/amplify-cbtog-dev-4854e/6f132c10-af4f-11f0-b2d9-0ea921173f63",
+      "AmplifyAppId": "d1w9vdkxma6kv0"
+    },
+    "categories": {
+      "auth": {
+        "cbtog11d20698": {}
+      },
+      "api": {
+        "cbtog": {}
+      }
+    }
+  }
+}

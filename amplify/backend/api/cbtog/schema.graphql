@@ -1,0 +1,46 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+type UserProfile @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  owner: String
+  name: String
+  email: String!
+  joinDate: AWSDateTime!
+  weeklyConsistency: Int
+  totalEntries: Int
+  insightsGenerated: Int
+  goalsCompleted: Int
+  currentWeeklyFocus: String
+  weeklyFocusProgress: Int
+  lastLogin: AWSDateTime
+  preferences: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  entries: [Entry] @hasMany
+}
+
+type Entry @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  content: String!
+  moodScore: Int
+  anxietyScore: Int
+  stressScore: Int
+  detectedEmotions: [String]
+  detectedTriggers: [String]
+  energyLevel: String
+  sleepQuality: Int
+  aiInsight: String
+  moodCategory: String
+  tags: [String]
+  isFavorite: Boolean
+  location: String
+  weather: String
+  goalsCompleted: [String]
+  exerciseCompleted: Boolean
+  weeklyFocusProgress: Int
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  userProfile: UserProfile @belongsTo
+}
