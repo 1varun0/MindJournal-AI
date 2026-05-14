@@ -51,13 +51,17 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const { isSignedIn } = await signIn({ 
+      const { isSignedIn, nextStep } = await signIn({ 
         username: formData.email, 
         password: formData.password 
       });
       
       if (isSignedIn) {
         router.push('/dashboard');
+      } else if (nextStep?.signInStep === 'CONFIRM_SIGN_UP') {
+        router.push(`/verify-account?email=${encodeURIComponent(formData.email)}`);
+      } else {
+        setError(`Additional step required: ${nextStep?.signInStep || 'Unknown'}`);
       }
     } catch (err: any) {
       console.error('Error signing in:', err);
