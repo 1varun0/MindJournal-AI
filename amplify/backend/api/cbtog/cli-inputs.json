@@ -4,9 +4,14 @@
     "apiName": "cbtog",
     "serviceName": "AppSync",
     "defaultAuthType": {
-      "mode": "AMAZON_COGNITO_USER_POOLS",
-      "cognitoUserPoolId": "authcbtog11d20698"
+      "mode": "API_KEY",
+      "expirationTime": 365
     },
-    "additionalAuthTypes": []
+    "additionalAuthTypes": [
+      {
+        "mode": "AMAZON_COGNITO_USER_POOLS",
+        "cognitoUserPoolId": "authcbtog11d20698"
+      }
+    ]
   }
 }
