@@ -1,0 +1,786 @@
+AWS Amplify - MindJournal-AI - deployment
+
+AWS AppSync - 
+    Schema:
+          input CreateEntryInput {
+	id: ID
+	content: String!
+	moodScore: Int
+	anxietyScore: Int
+	stressScore: Int
+	detectedEmotions: [String]
+	detectedTriggers: [String]
+	energyLevel: String
+	sleepQuality: Int
+	aiInsight: String
+	moodCategory: String
+	tags: [String]
+	isFavorite: Boolean
+	location: String
+	weather: String
+	goalsCompleted: [String]
+	exerciseCompleted: Boolean
+	weeklyFocusProgress: Int
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+	userProfileEntriesId: ID
+}
+
+input CreateUserProfileInput {
+	id: ID
+	owner: String
+	name: String
+	email: String!
+	joinDate: AWSDateTime!
+	weeklyConsistency: Int
+	totalEntries: Int
+	insightsGenerated: Int
+	goalsCompleted: Int
+	currentWeeklyFocus: String
+	weeklyFocusProgress: Int
+	lastLogin: AWSDateTime
+	preferences: String
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+}
+
+input DeleteEntryInput {
+	id: ID!
+}
+
+input DeleteUserProfileInput {
+	id: ID!
+}
+
+type Entry @aws_cognito_user_pools {
+	id: ID!
+	content: String!
+	moodScore: Int
+	anxietyScore: Int
+	stressScore: Int
+	detectedEmotions: [String]
+	detectedTriggers: [String]
+	energyLevel: String
+	sleepQuality: Int
+	aiInsight: String
+	moodCategory: String
+	tags: [String]
+	isFavorite: Boolean
+	location: String
+	weather: String
+	goalsCompleted: [String]
+	exerciseCompleted: Boolean
+	weeklyFocusProgress: Int
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+	userProfile: UserProfile
+	userProfileEntriesId: ID
+	owner: String
+}
+
+enum ModelAttributeTypes {
+	binary
+	binarySet
+	bool
+	list
+	map
+	number
+	numberSet
+	string
+	stringSet
+	_null
+}
+
+input ModelBooleanInput {
+	ne: Boolean
+	eq: Boolean
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+}
+
+input ModelEntryConditionInput {
+	content: ModelStringInput
+	moodScore: ModelIntInput
+	anxietyScore: ModelIntInput
+	stressScore: ModelIntInput
+	detectedEmotions: ModelStringInput
+	detectedTriggers: ModelStringInput
+	energyLevel: ModelStringInput
+	sleepQuality: ModelIntInput
+	aiInsight: ModelStringInput
+	moodCategory: ModelStringInput
+	tags: ModelStringInput
+	isFavorite: ModelBooleanInput
+	location: ModelStringInput
+	weather: ModelStringInput
+	goalsCompleted: ModelStringInput
+	exerciseCompleted: ModelBooleanInput
+	weeklyFocusProgress: ModelIntInput
+	createdAt: ModelStringInput
+	updatedAt: ModelStringInput
+	and: [ModelEntryConditionInput]
+	or: [ModelEntryConditionInput]
+	not: ModelEntryConditionInput
+	userProfileEntriesId: ModelIDInput
+	owner: ModelStringInput
+}
+
+type ModelEntryConnection @aws_cognito_user_pools {
+	items: [Entry]!
+	nextToken: String
+}
+
+input ModelEntryFilterInput {
+	id: ModelIDInput
+	content: ModelStringInput
+	moodScore: ModelIntInput
+	anxietyScore: ModelIntInput
+	stressScore: ModelIntInput
+	detectedEmotions: ModelStringInput
+	detectedTriggers: ModelStringInput
+	energyLevel: ModelStringInput
+	sleepQuality: ModelIntInput
+	aiInsight: ModelStringInput
+	moodCategory: ModelStringInput
+	tags: ModelStringInput
+	isFavorite: ModelBooleanInput
+	location: ModelStringInput
+	weather: ModelStringInput
+	goalsCompleted: ModelStringInput
+	exerciseCompleted: ModelBooleanInput
+	weeklyFocusProgress: ModelIntInput
+	createdAt: ModelStringInput
+	updatedAt: ModelStringInput
+	and: [ModelEntryFilterInput]
+	or: [ModelEntryFilterInput]
+	not: ModelEntryFilterInput
+	userProfileEntriesId: ModelIDInput
+	owner: ModelStringInput
+}
+
+input ModelFloatInput {
+	ne: Float
+	eq: Float
+	le: Float
+	lt: Float
+	ge: Float
+	gt: Float
+	between: [Float]
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+}
+
+input ModelIDInput {
+	ne: ID
+	eq: ID
+	le: ID
+	lt: ID
+	ge: ID
+	gt: ID
+	contains: ID
+	notContains: ID
+	between: [ID]
+	beginsWith: ID
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+	size: ModelSizeInput
+}
+
+input ModelIntInput {
+	ne: Int
+	eq: Int
+	le: Int
+	lt: Int
+	ge: Int
+	gt: Int
+	between: [Int]
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+}
+
+input ModelSizeInput {
+	ne: Int
+	eq: Int
+	le: Int
+	lt: Int
+	ge: Int
+	gt: Int
+	between: [Int]
+}
+
+enum ModelSortDirection {
+	ASC
+	DESC
+}
+
+input ModelStringInput {
+	ne: String
+	eq: String
+	le: String
+	lt: String
+	ge: String
+	gt: String
+	contains: String
+	notContains: String
+	between: [String]
+	beginsWith: String
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+	size: ModelSizeInput
+}
+
+input ModelSubscriptionBooleanInput {
+	ne: Boolean
+	eq: Boolean
+}
+
+input ModelSubscriptionEntryFilterInput {
+	id: ModelSubscriptionIDInput
+	content: ModelSubscriptionStringInput
+	moodScore: ModelSubscriptionIntInput
+	anxietyScore: ModelSubscriptionIntInput
+	stressScore: ModelSubscriptionIntInput
+	detectedEmotions: ModelSubscriptionStringInput
+	detectedTriggers: ModelSubscriptionStringInput
+	energyLevel: ModelSubscriptionStringInput
+	sleepQuality: ModelSubscriptionIntInput
+	aiInsight: ModelSubscriptionStringInput
+	moodCategory: ModelSubscriptionStringInput
+	tags: ModelSubscriptionStringInput
+	isFavorite: ModelSubscriptionBooleanInput
+	location: ModelSubscriptionStringInput
+	weather: ModelSubscriptionStringInput
+	goalsCompleted: ModelSubscriptionStringInput
+	exerciseCompleted: ModelSubscriptionBooleanInput
+	weeklyFocusProgress: ModelSubscriptionIntInput
+	createdAt: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	and: [ModelSubscriptionEntryFilterInput]
+	or: [ModelSubscriptionEntryFilterInput]
+	owner: ModelStringInput
+}
+
+input ModelSubscriptionFloatInput {
+	ne: Float
+	eq: Float
+	le: Float
+	lt: Float
+	ge: Float
+	gt: Float
+	between: [Float]
+	in: [Float]
+	notIn: [Float]
+}
+
+input ModelSubscriptionIDInput {
+	ne: ID
+	eq: ID
+	le: ID
+	lt: ID
+	ge: ID
+	gt: ID
+	contains: ID
+	notContains: ID
+	between: [ID]
+	beginsWith: ID
+	in: [ID]
+	notIn: [ID]
+}
+
+input ModelSubscriptionIntInput {
+	ne: Int
+	eq: Int
+	le: Int
+	lt: Int
+	ge: Int
+	gt: Int
+	between: [Int]
+	in: [Int]
+	notIn: [Int]
+}
+
+input ModelSubscriptionStringInput {
+	ne: String
+	eq: String
+	le: String
+	lt: String
+	ge: String
+	gt: String
+	contains: String
+	notContains: String
+	between: [String]
+	beginsWith: String
+	in: [String]
+	notIn: [String]
+}
+
+input ModelSubscriptionUserProfileFilterInput {
+	id: ModelSubscriptionIDInput
+	name: ModelSubscriptionStringInput
+	email: ModelSubscriptionStringInput
+	joinDate: ModelSubscriptionStringInput
+	weeklyConsistency: ModelSubscriptionIntInput
+	totalEntries: ModelSubscriptionIntInput
+	insightsGenerated: ModelSubscriptionIntInput
+	goalsCompleted: ModelSubscriptionIntInput
+	currentWeeklyFocus: ModelSubscriptionStringInput
+	weeklyFocusProgress: ModelSubscriptionIntInput
+	lastLogin: ModelSubscriptionStringInput
+	preferences: ModelSubscriptionStringInput
+	createdAt: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	and: [ModelSubscriptionUserProfileFilterInput]
+	or: [ModelSubscriptionUserProfileFilterInput]
+	userProfileEntriesId: ModelSubscriptionIDInput
+	owner: ModelStringInput
+}
+
+input ModelUserProfileConditionInput {
+	owner: ModelStringInput
+	name: ModelStringInput
+	email: ModelStringInput
+	joinDate: ModelStringInput
+	weeklyConsistency: ModelIntInput
+	totalEntries: ModelIntInput
+	insightsGenerated: ModelIntInput
+	goalsCompleted: ModelIntInput
+	currentWeeklyFocus: ModelStringInput
+	weeklyFocusProgress: ModelIntInput
+	lastLogin: ModelStringInput
+	preferences: ModelStringInput
+	createdAt: ModelStringInput
+	updatedAt: ModelStringInput
+	and: [ModelUserProfileConditionInput]
+	or: [ModelUserProfileConditionInput]
+	not: ModelUserProfileConditionInput
+}
+
+type ModelUserProfileConnection @aws_cognito_user_pools {
+	items: [UserProfile]!
+	nextToken: String
+}
+
+input ModelUserProfileFilterInput {
+	id: ModelIDInput
+	owner: ModelStringInput
+	name: ModelStringInput
+	email: ModelStringInput
+	joinDate: ModelStringInput
+	weeklyConsistency: ModelIntInput
+	totalEntries: ModelIntInput
+	insightsGenerated: ModelIntInput
+	goalsCompleted: ModelIntInput
+	currentWeeklyFocus: ModelStringInput
+	weeklyFocusProgress: ModelIntInput
+	lastLogin: ModelStringInput
+	preferences: ModelStringInput
+	createdAt: ModelStringInput
+	updatedAt: ModelStringInput
+	and: [ModelUserProfileFilterInput]
+	or: [ModelUserProfileFilterInput]
+	not: ModelUserProfileFilterInput
+}
+
+input UpdateEntryInput {
+	id: ID!
+	content: String
+	moodScore: Int
+	anxietyScore: Int
+	stressScore: Int
+	detectedEmotions: [String]
+	detectedTriggers: [String]
+	energyLevel: String
+	sleepQuality: Int
+	aiInsight: String
+	moodCategory: String
+	tags: [String]
+	isFavorite: Boolean
+	location: String
+	weather: String
+	goalsCompleted: [String]
+	exerciseCompleted: Boolean
+	weeklyFocusProgress: Int
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+	userProfileEntriesId: ID
+}
+
+input UpdateUserProfileInput {
+	id: ID!
+	owner: String
+	name: String
+	email: String
+	joinDate: AWSDateTime
+	weeklyConsistency: Int
+	totalEntries: Int
+	insightsGenerated: Int
+	goalsCompleted: Int
+	currentWeeklyFocus: String
+	weeklyFocusProgress: Int
+	lastLogin: AWSDateTime
+	preferences: String
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+}
+
+type UserProfile @aws_cognito_user_pools {
+	id: ID!
+	owner: String
+	name: String
+	email: String!
+	joinDate: AWSDateTime!
+	weeklyConsistency: Int
+	totalEntries: Int
+	insightsGenerated: Int
+	goalsCompleted: Int
+	currentWeeklyFocus: String
+	weeklyFocusProgress: Int
+	lastLogin: AWSDateTime
+	preferences: String
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+	entries(
+		filter: ModelEntryFilterInput,
+		sortDirection: ModelSortDirection,
+		limit: Int,
+		nextToken: String
+	): ModelEntryConnection
+}
+
+type Mutation {
+	createUserProfile(input: CreateUserProfileInput!, condition: ModelUserProfileConditionInput): UserProfile
+		@aws_cognito_user_pools
+	updateUserProfile(input: UpdateUserProfileInput!, condition: ModelUserProfileConditionInput): UserProfile
+		@aws_cognito_user_pools
+	deleteUserProfile(input: DeleteUserProfileInput!, condition: ModelUserProfileConditionInput): UserProfile
+		@aws_cognito_user_pools
+	createEntry(input: CreateEntryInput!, condition: ModelEntryConditionInput): Entry
+		@aws_cognito_user_pools
+	updateEntry(input: UpdateEntryInput!, condition: ModelEntryConditionInput): Entry
+		@aws_cognito_user_pools
+	deleteEntry(input: DeleteEntryInput!, condition: ModelEntryConditionInput): Entry
+		@aws_cognito_user_pools
+}
+
+type Query {
+	getUserProfile(id: ID!): UserProfile
+		@aws_cognito_user_pools
+	listUserProfiles(filter: ModelUserProfileFilterInput, limit: Int, nextToken: String): ModelUserProfileConnection
+		@aws_cognito_user_pools
+	getEntry(id: ID!): Entry
+		@aws_cognito_user_pools
+	listEntries(filter: ModelEntryFilterInput, limit: Int, nextToken: String): ModelEntryConnection
+		@aws_cognito_user_pools
+}
+
+type Subscription {
+	onCreateUserProfile(filter: ModelSubscriptionUserProfileFilterInput, owner: String): UserProfile
+		@aws_subscribe(mutations: ["createUserProfile"])
+@aws_cognito_user_pools
+	onUpdateUserProfile(filter: ModelSubscriptionUserProfileFilterInput, owner: String): UserProfile
+		@aws_subscribe(mutations: ["updateUserProfile"])
+@aws_cognito_user_pools
+	onDeleteUserProfile(filter: ModelSubscriptionUserProfileFilterInput, owner: String): UserProfile
+		@aws_subscribe(mutations: ["deleteUserProfile"])
+@aws_cognito_user_pools
+	onCreateEntry(filter: ModelSubscriptionEntryFilterInput, owner: String): Entry
+		@aws_subscribe(mutations: ["createEntry"])
+@aws_cognito_user_pools
+	onUpdateEntry(filter: ModelSubscriptionEntryFilterInput, owner: String): Entry
+		@aws_subscribe(mutations: ["updateEntry"])
+@aws_cognito_user_pools
+	onDeleteEntry(filter: ModelSubscriptionEntryFilterInput, owner: String): Entry
+		@aws_subscribe(mutations: ["deleteEntry"])
+@aws_cognito_user_pools
+}
+
+Data sources:
+Entry_table
+UserProfileTable
+
+
+Lambda:
+function - cbt-bedrock-processor:
+import { BedrockRuntimeClient, InvokeModelCommand } from "@aws-sdk/client-bedrock-runtime";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, UpdateCommand } from "@aws-sdk/lib-dynamodb";
+
+const bedrockClient = new BedrockRuntimeClient({ region: "eu-north-1" });
+const ddbDocClient = DynamoDBDocumentClient.from(new DynamoDBClient({ region: "eu-north-1" }));
+
+// WORKING MODELS (no inference profiles needed)
+const MODELS_TO_TRY = [
+  "deepseek.v3-v1:0",                            // DeepSeek V3 - WORKING!
+  "qwen.qwen3-235b-a22b-2507-v1:0",              // Qwen 235B
+  "qwen.qwen3-coder-480b-a35b-v1:0",             // Qwen Coder 480B
+  "openai.gpt-oss-120b-1:0",                     // GPT OSS 120B
+  "qwen.qwen3-coder-30b-a3b-v1:0",               // Qwen Coder 30B
+  "qwen.qwen3-32b-v1:0"                          // Qwen 32B
+];
+
+const ENTRIES_TABLE = "Entry-4xyf7jwncbaxxhwnay24gogxvq-dev";
+
+export const handler = async (event) => {
+  console.log(`EVENT: ${JSON.stringify(event)}`);
+
+  for (const record of event.Records) {
+    if (record.eventName === 'INSERT') {
+      const newEntry = record.dynamodb.NewImage;
+      const entryId = newEntry.id.S;
+      const entryContent = newEntry.content.S;
+
+      console.log(`📝 Processing new entry: ${entryId}`);
+
+      let success = false;
+      
+      for (const modelId of MODELS_TO_TRY) {
+        try {
+          console.log(`🔄 Trying model: ${modelId}`);
+          const aiAnalysis = await invokeBedrockModel(modelId, entryContent);
+          await updateDynamoDB(entryId, aiAnalysis);
+          console.log(`✅ Success with model: ${modelId}`);
+          success = true;
+          break;
+        } catch (error) {
+          console.log(`❌ Failed with ${modelId}:`, error.message);
+          continue;
+        }
+      }
+
+      if (!success) {
+        console.log("🔄 All models failed, using default values");
+        await setDefaultValues(entryId);
+      }
+    }
+  }
+  return { status: 'done' };
+};
+
+async function invokeBedrockModel(modelId, content) {
+  // COMPREHENSIVE PROMPT - Your original detailed version
+  const prompt = `You are an experienced CBT (Cognitive Behavioral Therapy) therapist with expertise in mental health and emotional analysis. 
+
+Analyze this journal entry from a therapeutic perspective and provide comprehensive insights.
+
+JOURNAL ENTRY TO ANALYZE:
+"${content}"
+
+YOUR TASK:
+Provide a detailed JSON response with these exact fields:
+
+1. moodScore: integer 1-10 (1=very low mood, 10=excellent mood)
+2. anxietyScore: integer 1-10 (1=completely calm, 10=extremely anxious)
+3. stressScore: integer 1-10 (1=no stress, 10=overwhelming stress)
+4. detectedEmotions: array of 2-3 primary emotions (e.g., ["anxious", "overwhelmed", "hopeful"])
+5. energyLevel: "High", "Medium", or "Low"
+6. moodCategory: "Positive", "Neutral", or "Low" based on overall emotional tone
+7. aiInsight: A compassionate, supportive 2-3 sentence reflection that validates feelings and offers perspective
+8. recommendedAction: A specific, actionable CBT exercise (format: "Action Name\\nCategory\\nDescription")
+
+IMPORTANT SCORING GUIDELINES:
+- moodScore: Use the FULL 1-10 scale with nuance (2,3,4,6,7,8,9 are valid scores)
+- anxietyScore: Use the FULL 1-10 scale with nuance
+- stressScore: Use the FULL 1-10 scale with nuance
+- DO NOT just use 1, 5, 10 - be specific to the content
+- A mildly positive entry should be 6-7, not 10
+- A somewhat anxious entry should be 6-7, not 10
+- Be realistic and nuanced in your assessment
+
+RECOMMENDED ACTION FORMAT EXAMPLES:
+"Morning Breathing Routine\\nAnxiety Management\\nTry 5 minutes of deep breathing exercises when you wake up to reduce morning anxiety"
+"Gratitude Practice\\nPositive Mindset\\nWrite down three things you're grateful for each evening to improve mood"
+"Thought Record\\nCognitive Restructuring\\nChallenge negative thoughts by writing evidence for and against them"
+"Progressive Muscle Relaxation\\nStress Relief\\nTense and relax each muscle group systematically to release physical tension"
+"Behavioral Activation\\nMood Improvement\\nSchedule one enjoyable activity daily to combat low mood"
+
+ANALYSIS GUIDELINES:
+- Be empathetic and non-judgmental
+- Focus on patterns and underlying themes
+- Suggest practical, evidence-based CBT techniques
+- Consider the emotional depth and complexity
+- Provide insights that encourage self-reflection and growth
+
+Respond with ONLY the JSON object, no other text or explanations.
+
+Required JSON format:
+{
+  "moodScore": 7,
+  "anxietyScore": 6,
+  "stressScore": 5,
+  "detectedEmotions": ["specific", "emotions", "here"],
+  "energyLevel": "High/Medium/Low",
+  "moodCategory": "Positive/Neutral/Low",
+  "aiInsight": "supportive insight here",
+  "recommendedAction": "Action Name\\nCategory\\nDescription"
+}`;
+
+  let body;
+
+  if (modelId.startsWith('deepseek.v3')) {
+    // DEEPSEEK MODELS - Messages format
+    body = JSON.stringify({
+      messages: [
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      max_tokens: 1500,
+      temperature: 0.7
+    });
+  } else if (modelId.startsWith('qwen.') || modelId.startsWith('openai.gpt-oss')) {
+    // QWEN & GPT OSS MODELS - Messages format
+    body = JSON.stringify({
+      messages: [
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      max_tokens: 1500,
+      temperature: 0.7
+    });
+  }
+
+  const command = new InvokeModelCommand({
+    modelId,
+    contentType: "application/json",
+    accept: "application/json", 
+    body,
+  });
+
+  console.log(`🤖 Calling ${modelId}...`);
+  const apiResponse = await bedrockClient.send(command);
+  
+  const decodedBody = new TextDecoder().decode(apiResponse.body);
+  const responseBody = JSON.parse(decodedBody);
+  
+  let aiText;
+  
+  if (modelId.startsWith('deepseek.v3') || modelId.startsWith('qwen.') || modelId.startsWith('openai.gpt-oss')) {
+    aiText = responseBody.choices?.[0]?.message?.content || responseBody.output?.text || "";
+  }
+
+  console.log("RAW AI RESPONSE:", aiText);
+
+  if (!aiText) {
+    throw new Error('Empty response from Bedrock');
+  }
+
+  // Extract JSON from response
+  const jsonMatch = aiText.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    throw new Error('No JSON found in response');
+  }
+
+  try {
+    const aiJson = JSON.parse(jsonMatch[0]);
+    console.log("PARSED AI JSON:", aiJson);
+    
+    return {
+      moodScore: validateScore(aiJson.moodScore),
+      anxietyScore: validateScore(aiJson.anxietyScore),
+      stressScore: validateScore(aiJson.stressScore || 5),
+      detectedEmotions: Array.isArray(aiJson.detectedEmotions) ? aiJson.detectedEmotions.slice(0, 3) : ["neutral"],
+      energyLevel: validateEnergyLevel(aiJson.energyLevel),
+      moodCategory: validateMoodCategory(aiJson.moodCategory), 
+      aiInsight: validateInsight(aiJson.aiInsight),
+      location: validateRecommendedAction(aiJson.recommendedAction)
+    };
+    
+  } catch (parseError) {
+    console.log('JSON parse error:', parseError);
+    throw new Error('Invalid JSON format');
+  }
+}
+
+// Validation functions
+function validateScore(score) {
+  if (score === null || score === undefined) return 5;
+  if (typeof score === 'string') {
+    const cleaned = score.replace(/[^\d.-]/g, '');
+    const num = parseInt(cleaned);
+    if (!isNaN(num) && num >= 1 && num <= 10) return num;
+  }
+  if (typeof score === 'number') {
+    return Math.max(1, Math.min(10, Math.round(score)));
+  }
+  return 5;
+}
+
+function validateEnergyLevel(level) {
+  if (!level) return "Medium";
+  const cleanLevel = level.trim();
+  if (["High", "Medium", "Low"].includes(cleanLevel)) return cleanLevel;
+  return "Medium";
+}
+
+function validateMoodCategory(category) {
+  if (!category) return "Neutral";
+  const cleanCategory = category.trim();
+  if (["Positive", "Neutral", "Low"].includes(cleanCategory)) return cleanCategory;
+  return "Neutral";
+}
+
+function validateInsight(insight) {
+  if (!insight || typeof insight !== 'string') {
+    return "It's helpful to acknowledge and sit with whatever you're feeling right now. Your awareness is the first step toward understanding.";
+  }
+  return insight.slice(0, 500);
+}
+
+function validateRecommendedAction(action) {
+  if (!action || typeof action !== 'string') {
+    return "Deep Breathing\\nStress Relief\\nTake 3-5 minutes for deep breathing to center yourself";
+  }
+  return action.slice(0, 300);
+}
+
+async function updateDynamoDB(entryId, aiAnalysis) {
+  const updateParams = {
+    TableName: ENTRIES_TABLE,
+    Key: { id: entryId },
+    UpdateExpression: "SET moodScore = :ms, anxietyScore = :as, stressScore = :ss, detectedEmotions = :de, energyLevel = :el, moodCategory = :mc, aiInsight = :ai, #loc = :loc",
+    ExpressionAttributeNames: { "#loc": "location" },
+    ExpressionAttributeValues: {
+      ":ms": aiAnalysis.moodScore, ":as": aiAnalysis.anxietyScore, ":ss": aiAnalysis.stressScore,
+      ":de": aiAnalysis.detectedEmotions, ":el": aiAnalysis.energyLevel, ":mc": aiAnalysis.moodCategory,
+      ":ai": aiAnalysis.aiInsight, ":loc": aiAnalysis.location
+    },
+  };
+  await ddbDocClient.send(new UpdateCommand(updateParams));
+  console.log("✅ Updated DynamoDB with AI analysis");
+}
+
+async function setDefaultValues(entryId) {
+  const defaultAnalysis = {
+    moodScore: 5,
+    anxietyScore: 5,
+    stressScore: 5,
+    detectedEmotions: ["neutral"],
+    energyLevel: "Medium",
+    moodCategory: "Neutral",
+    aiInsight: "It's helpful to acknowledge and sit with whatever you're feeling right now.",
+    location: "Deep Breathing\\nStress Relief\\nTake 3-5 minutes for deep breathing to center yourself"
+  };
+  await updateDynamoDB(entryId, defaultAnalysis);
+}
+
+
+
+
+DynammoDB:
+tables:
+https://eu-north-1.console.aws.amazon.com/dynamodbv2/home?region=eu-north-1#table?name=Entry-yetaj4upazghdaz4e33sqg2oai-main
+https://eu-north-1.console.aws.amazon.com/dynamodbv2/home?region=eu-north-1#table?name=UserProfile-yetaj4upazghdaz4e33sqg2oai-main
+
+AMazon Bedrock
+IAM
+
+
+Cognito:
+User pools:
+https://eu-north-1.console.aws.amazon.com/cognito/v2/idp/user-pools/eu-north-1_aElAhst1u/overview?region=eu-north-1
+identity pools
+
+Amazon simple email service
