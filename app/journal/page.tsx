@@ -26,11 +26,15 @@ export default function AppPage() {
     const fetchEntries = async () => {
       try {
         await getCurrentUser();
+        console.log("Auth session: ", await getCurrentUser());
         const { data } = await client.graphql({ query: listEntries });
+        console.log("GraphQL response: ", data);
         const sortedEntries = (data.listEntries.items as Entry[]).sort(
           (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
+        console.log("Sorted entries: ", sortedEntries);
         setEntries(sortedEntries);
+        setIsLoading(false);
       } catch (error: any) {
         console.error("Error fetching entries:", error);
         if (error.name === 'NotAuthorizedException' || error.name === 'UserNotFoundException' || error.message?.includes('No current user')) {
@@ -140,13 +144,13 @@ export default function AppPage() {
                   <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-lg p-3 text-center border border-purple-200/50 dark:border-purple-700/30">
                     <TrendingUp className="h-4 w-4 text-purple-600 dark:text-purple-400 mx-auto mb-1" />
                     <div className="text-lg font-bold text-purple-700 dark:text-purple-300">
-  {(() => {
-    const recentEntries = entries.slice(0, 3).filter(entry => entry.moodScore !== null && entry.moodScore !== undefined);
-    return recentEntries.length > 0 
-      ? (recentEntries.reduce((acc, entry) => acc + (entry.moodScore || 0), 0) / recentEntries.length).toFixed(1)
-      : "0.0";
-  })()}
-</div>
+      {(() => {
+        const recentEntries = entries.slice(0, 3).filter(entry => entry.moodScore !== null && entry.moodScore !== undefined);
+        return recentEntries.length > 0 
+          ? (recentEntries.reduce((acc, entry) => acc + (entry.moodScore || 0), 0) / recentEntries.length).toFixed(1)
+          : "0.0";
+      })()}
+    </div>
                     <div className="text-xs text-purple-600/80 dark:text-purple-400/80">Recent Avg</div>
                   </div>
                 </div>
