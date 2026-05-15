@@ -518,7 +518,7 @@ const MODELS_TO_TRY = [
   "qwen.qwen3-32b-v1:0"                          // Qwen 32B
 ];
 
-const ENTRIES_TABLE = "Entry-4xyf7jwncbaxxhwnay24gogxvq-dev";
+const ENTRIES_TABLE = process.env.ENTRIES_TABLE || "Entry-yetaj4upazghdaz4e33sqg2oai-main";
 
 export const handler = async (event) => {
   console.log(`EVENT: ${JSON.stringify(event)}`);

@@ -4,6 +4,7 @@ import "./globals.css";
 // import './amplify.config';
 // import ConfigureAmplifyClientSide from "./ConfigureAmplify";
 import '../lib/amplify'; // Add this import at the top
+import { ThemeProvider } from "./components/theme-provider";
 import { Brain } from "lucide-react";
 
 const geistSans = Geist({
@@ -33,7 +34,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* <ConfigureAmplifyClientSide /> */}
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html> 
   );

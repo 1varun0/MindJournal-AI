@@ -11,7 +11,8 @@ import { useRouter } from 'next/navigation';
 import { getCurrentUser, signOut, fetchUserAttributes } from 'aws-amplify/auth';
 import type { AuthUser, FetchUserAttributesOutput } from 'aws-amplify/auth';
 import { generateClient } from 'aws-amplify/api';
-import { listEntries } from '../../src/graphql/queries';
+import { listEntries, listUserProfiles } from '../../src/graphql/queries';
+import { updateUserProfile } from '../../src/graphql/mutations';
 import type { Entry } from '../../src/API';
 
 const client = generateClient();
@@ -91,6 +92,7 @@ export default function ProfilePage() {
     const [entries, setEntries] = useState<Entry[]>([]);
     const [goals, setGoals] = useState<string[]>(["Reduce anxiety", "Better sleep", "Mindfulness"]);
     const [newGoal, setNewGoal] = useState('');
+    const [profileId, setProfileId] = useState<string | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -102,6 +104,23 @@ export default function ProfilePage() {
                 setAttributes(userAttributes);
                 const entriesData = await client.graphql({ query: listEntries });
                 setEntries(entriesData.data.listEntries.items as Entry[]);
+
+                const profileData = await client.graphql({ query: listUserProfiles });
+                const profiles = profileData.data?.listUserProfiles?.items || [];
+                if (profiles.length > 0) {
+                    const profile = profiles[0];
+                    setProfileId(profile.id);
+                    if (profile.preferences) {
+                        try {
+                            const savedGoals = JSON.parse(profile.preferences);
+                            if (Array.isArray(savedGoals) && savedGoals.length > 0) {
+                                setGoals(savedGoals);
+                            }
+                        } catch (e) {
+                            console.error("Failed to parse preferences", e);
+                        }
+                    }
+                }
             } catch (error) {
                 router.push('/login');
             }
@@ -118,15 +137,49 @@ export default function ProfilePage() {
         }
     };
 
-    const handleAddGoal = () => {
+    const handleAddGoal = async () => {
         if (newGoal.trim() && !goals.includes(newGoal.trim())) {
-            setGoals([...goals, newGoal.trim()]);
+            const updatedGoals = [...goals, newGoal.trim()];
+            setGoals(updatedGoals);
             setNewGoal('');
+            
+            if (profileId) {
+                try {
+                    await client.graphql({
+                        query: updateUserProfile,
+                        variables: {
+                            input: {
+                                id: profileId,
+                                preferences: JSON.stringify(updatedGoals)
+                            }
+                        }
+                    });
+                } catch (error) {
+                    console.error("Error saving goal:", error);
+                }
+            }
         }
     };
 
-    const handleRemoveGoal = (goalToRemove: string) => {
-        setGoals(goals.filter(goal => goal !== goalToRemove));
+    const handleRemoveGoal = async (goalToRemove: string) => {
+        const updatedGoals = goals.filter(goal => goal !== goalToRemove);
+        setGoals(updatedGoals);
+        
+        if (profileId) {
+            try {
+                await client.graphql({
+                    query: updateUserProfile,
+                    variables: {
+                        input: {
+                            id: profileId,
+                            preferences: JSON.stringify(updatedGoals)
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error removing goal:", error);
+            }
+        }
     };
 
     const handleExportData = () => {
