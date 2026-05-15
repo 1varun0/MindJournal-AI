@@ -53,9 +53,10 @@ export function JournalForm() {
       setIsSuccess(true)
       setEntry("");
       
-      // Force a full page reload to the dashboard to show fresh data
+      // Navigate to dashboard and refresh data
       setTimeout(() => {
-        window.location.href = "/dashboard";
+        router.refresh();
+        router.push("/dashboard");
       }, 1500);
 
     } catch (error: any) {
