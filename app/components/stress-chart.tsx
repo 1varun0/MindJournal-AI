@@ -1,7 +1,7 @@
 "use client"
 import type { Entry } from "@/API";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import { useState } from "react"
 
 interface StressChartProps {
@@ -170,7 +170,13 @@ export function StressChart({ entries }: StressChartProps) {
         <div className="h-[250px]">
           {chartData.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+              <AreaChart data={chartData} margin={{ top: 5, right: 30, left: 0, bottom: 5 }}>
+                <defs>
+                  <linearGradient id="colorStress" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#ef4444" stopOpacity={0.8}/>
+                    <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
                 <CartesianGrid 
                   strokeDasharray="3 3" 
                   stroke="hsl(var(--border))" 
@@ -194,18 +200,20 @@ export function StressChart({ entries }: StressChartProps) {
                   tickMargin={10}
                   ticks={[0, 2, 4, 6, 8, 10]}
                 />
-                <Tooltip content={<CustomTooltip />} />
-                {/* Stress Line */}
-                <Line
+                <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'hsl(var(--border))', strokeWidth: 1, strokeDasharray: '5 5' }} />
+                {/* Stress Area */}
+                <Area
                   type="monotone"
                   dataKey="stress"
-                  stroke="#ff6b6b"
-                  strokeWidth={2}
-                  dot={{ fill: '#ff6b6b', strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6, fill: '#ff6b6b' }}
+                  stroke="#ef4444"
+                  strokeWidth={3}
+                  fillOpacity={1}
+                  fill="url(#colorStress)"
+                  dot={{ fill: '#ef4444', strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6, fill: '#ef4444', stroke: '#fff', strokeWidth: 2 }}
                   name="Stress"
                 />
-              </LineChart>
+              </AreaChart>
             </ResponsiveContainer>
           ) : (
             <div className="h-full flex items-center justify-center text-muted-foreground">
