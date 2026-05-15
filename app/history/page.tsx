@@ -34,8 +34,11 @@ export default function HistoryPage() {
           (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
         setEntries(sortedEntries);
-      } catch (error) {
-        router.push("/login");
+      } catch (error: any) {
+        console.error("Error fetching history entries:", error);
+        if (error.name === 'NotAuthorizedException' || error.name === 'UserNotFoundException' || error.message?.includes('No current user')) {
+          router.push("/login");
+        }
       } finally {
         setIsLoading(false);
       }
