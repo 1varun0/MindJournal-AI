@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { generateClient } from "aws-amplify/api";
-import { getCurrentUser, fetchAuthSession } from "aws-amplify/auth";
+import { getCurrentUser, fetchAuthSession, fetchUserAttributes } from "aws-amplify/auth";
 
 import { AppHeader } from "../components/app-header";
 import { MoodChart } from "../components/mood-chart";
@@ -13,7 +13,8 @@ import { Navigation } from "../components/navigation";
 import { Button } from "../components/ui/button";
 import { Card, CardContent } from "../components/ui/card";
 import { Calendar, Flame, BookOpen, Smile, TrendingUp, TrendingDown } from "lucide-react";
-import { listEntries } from "../../src/graphql/queries";
+import { listEntries, listUserProfiles } from "../../src/graphql/queries";
+import { createUserProfile } from "../../src/graphql/mutations";
 import type { Entry } from "../../src/API";
 import { WelcomeCard } from "./welcome";
 import { StressChart } from "../components/stress-chart";
@@ -121,6 +122,40 @@ export default function DashboardPage() {
         // Get current user
         const currentUser = await getCurrentUser();
         console.log('Current user:', currentUser);
+
+        // Check if UserProfile exists
+        console.log('Checking UserProfile...');
+        const profileResponse = await client.graphql({
+          query: listUserProfiles
+        });
+
+        const profiles = profileResponse.data?.listUserProfiles?.items || [];
+        
+        if (profiles.length === 0) {
+          console.log('UserProfile not found. Creating one...');
+          const attributes = await fetchUserAttributes();
+          const email = attributes.email || currentUser.username;
+          
+          await client.graphql({
+            query: createUserProfile,
+            variables: {
+              input: {
+                email: email,
+                joinDate: new Date().toISOString(),
+                weeklyConsistency: 0,
+                totalEntries: 0,
+                insightsGenerated: 0,
+                goalsCompleted: 0,
+                currentWeeklyFocus: "Track my mood",
+                weeklyFocusProgress: 0,
+                preferences: "{}"
+              }
+            }
+          });
+          console.log('UserProfile created successfully.');
+        } else {
+          console.log('UserProfile already exists.');
+        }
 
         // Fetch entries with better error handling
         console.log('Fetching entries...');
