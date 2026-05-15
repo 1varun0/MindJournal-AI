@@ -194,7 +194,6 @@ mindjournal-ai/
 - [ ] **Voice Journaling:** Integrate AWS Transcribe to allow users to record spoken journal entries.
 - [ ] **Weekly PDF Reports:** Automated generation of therapeutic reports to share with real-world therapists.
 - [ ] **Mobile App:** Port the responsive web app to React Native for native iOS/Android experiences.
-- [ ] **Dark Mode:** Complete theme toggle implementation (currently supported via Tailwind `dark:` classes).
 
 ---
 
