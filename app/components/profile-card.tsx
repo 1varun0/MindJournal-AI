@@ -13,6 +13,7 @@ interface ProfileCardProps {
     goals?: string[]
     avgEntryLength?: number
     favoriteEmotion?: string
+    profileImageUrl?: string
 }
 
 export function ProfileCard({
@@ -23,14 +24,15 @@ export function ProfileCard({
     totalEntries = 42,
     goals = ["Reduce anxiety", "Better sleep", "Mindfulness"],
     avgEntryLength = 120,
-    favoriteEmotion = "Reflective"
+    favoriteEmotion = "Reflective",
+    profileImageUrl
 }: ProfileCardProps) {
     return (
         <Card className="w-full border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-2xl">
             <CardHeader className="pb-4">
                 <div className="flex items-center gap-4">
                     <Avatar className="h-16 w-16 border-2 border-blue-200 dark:border-blue-800">
-                        <AvatarImage src="/professional-headshot.png" />
+                        {profileImageUrl && <AvatarImage src={profileImageUrl} alt={name} />}
                         <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-white text-lg font-semibold">
                             {name
                                 .split(" ")
